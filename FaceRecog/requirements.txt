@@ -41,3 +41,5 @@ sentencepiece==0.2.0  # 文本分词器，用于NLP任务
 six==1.17.0           # Python 2和3兼容性库
 sounddevice==0.5.2    # 音频播放和录制库
 Werkzeug==3.1.3       # WSGI工具库，Flask的依赖
+
+#
