@@ -122,3 +122,7 @@ The script will check dependencies, configure, and start the application. If no 
 ## Developer
 
 * Severin Ye
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file in the root directory for details.
