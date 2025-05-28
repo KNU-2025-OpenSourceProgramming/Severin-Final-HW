@@ -1,0 +1,31 @@
+# 统一依赖文件 - 包含所有子项目的依赖
+
+# Flask 通用依赖
+Flask>=3.1.0
+flask-cors>=5.0.1
+python-dotenv>=1.1.0
+
+# YouTube API 应用依赖
+google-api-python-client>=2.170.0
+pyngrok>=7.2.8
+
+# 人脸识别应用依赖
+mediapipe>=0.10.0
+opencv-python>=4.11.0
+numpy>=2.0.0
+
+# YOLOv8 对象检测应用依赖
+ultralytics>=0.11.0  # YOLOv8 库
+pillow>=11.0.0
+matplotlib>=3.10.0
+pandas>=2.0.0
+psutil>=7.0.0
+
+# 通用依赖
+requests>=2.32.0
+certifi>=2025.4.0
+chardet>=3.0.0
+idna>=3.0.0
+urllib3>=2.0.0
+setuptools>=66.0.0
+wheel>=0.40.0
