@@ -1,0 +1,43 @@
+# 人脸识别项目依赖文件
+# filepath: /home/severin/CodeLib_linux/KNU_Class/OpenSource_class_linux/FinalHW/FaceRecog/requirements.txt
+
+# 核心工具库
+absl-py==2.3.0        # Google的开源库，提供各种辅助功能
+attrs==25.3.0         # Python类的声明性属性管理
+blinker==1.9.0        # 信号处理库，用于对象间通信
+cffi==1.17.1          # C语言外部函数接口
+click==8.2.1          # 命令行界面创建工具
+contourpy==1.3.2      # 等高线计算库，matplotlib的依赖
+cycler==0.12.1        # 循环器工具，matplotlib的依赖
+
+# Web应用框架
+Flask==3.1.1          # 轻量级Web应用框架
+flask-cors==6.0.0     # Flask的跨域资源共享扩展
+flatbuffers==25.2.10  # 内存高效的序列化库
+fonttools==4.58.0     # 字体处理工具，matplotlib的依赖
+itsdangerous==2.2.0   # 安全地传递数据的库，Flask的依赖
+jax==0.6.1            # Google的高性能数值计算库
+jaxlib==0.6.1         # JAX的系统级依赖
+Jinja2==3.1.6         # 模板引擎，Flask的依赖
+kiwisolver==1.4.8     # 约束求解库，matplotlib的依赖
+MarkupSafe==3.0.2     # 安全地渲染HTML的库，Jinja2的依赖
+
+# 数据可视化和图像处理
+matplotlib==3.10.3    # 绘图库
+mediapipe==0.10.21    # Google的多媒体处理库，用于人脸识别等
+ml_dtypes==0.5.1      # 机器学习数据类型库
+numpy==1.26.4         # 科学计算的基础库，提供多维数组支持
+opencv-contrib-python==4.11.0.86  # OpenCV额外模块
+opencv-python==4.11.0.86  # OpenCV库的Python绑定，用于图像处理
+opt_einsum==3.4.0     # 优化的爱因斯坦求和操作
+packaging==25.0       # Python包版本解析库
+pillow==11.2.1        # 图像处理库
+protobuf==4.25.7      # Google的数据序列化库
+pycparser==2.22       # C语言解析器，cffi的依赖
+pyparsing==3.2.3      # 解析器库，matplotlib的依赖
+python-dateutil==2.9.0.post0  # 日期处理工具
+scipy==1.15.3         # 科学计算库，基于NumPy扩展
+sentencepiece==0.2.0  # 文本分词器，用于NLP任务
+six==1.17.0           # Python 2和3兼容性库
+sounddevice==0.5.2    # 音频播放和录制库
+Werkzeug==3.1.3       # WSGI工具库，Flask的依赖
