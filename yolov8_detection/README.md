@@ -25,7 +25,7 @@
 
 3. 在浏览器中访问：
    ```
-   http://localhost:5000
+   http://localhost:3000
    ```
 
 4. 通过ngrok暴露服务（可选）：
@@ -41,10 +41,14 @@
 ## 技术栈
 
 - 后端：Flask, Ultralytics YOLOv8
-- 前端：HTML, JavaScript
+- 前端：React, Bootstrap
 - 深度学习：YOLOv8预训练模型
 
-更多详细信息请参考[基于 YOLOv8 的实时对象检测.md](基于%20YOLOv8%20的实时对象检测.md)文档。
+## 项目文档
+
+- [基于 YOLOv8 的实时对象检测.md](基于%20YOLOv8%20的实时对象检测.md) - 详细的实现指南
+- [项目报告书.md](项目报告书.md) - 完整的项目技术报告
+- [project_report.md](project_report.md) - Project technical report (English version)
 
 ## 开源许可
 
