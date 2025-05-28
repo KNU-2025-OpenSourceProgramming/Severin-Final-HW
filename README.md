@@ -1,129 +1,144 @@
-# 多媒体Web应用集合
 
-这是一个包含三个独立Web应用的集合项目，每个应用都专注于特定的多媒体和机器学习功能。这些应用均使用Flask作为后端框架，结合现代前端技术提供直观的用户界面。
+# Multimedia Web Application Collection
 
-## 项目结构
+This is a collection project that includes three independent web applications, each focusing on specific multimedia and machine learning functionalities. All applications use **Flask** as the backend framework, combined with modern frontend technologies to provide intuitive user interfaces.
 
-本项目包含以下三个主要子项目：
+---
 
-1. **人脸识别应用** - 使用MediaPipe进行实时人脸检测与识别
-2. **YouTube API视频内容搜索** - 利用YouTube Data API搜索和展示视频内容  
-3. **YOLOv8对象检测** - 使用YOLOv8模型进行实时图像对象检测
+## Project Structure
 
-## 环境要求
+This project includes the following three main sub-projects:
 
-本项目要求使用Python 3.6+，并为每个子项目提供了独立的依赖项。您可以选择为每个应用创建单独的虚拟环境，或者使用根目录中的统一依赖文件。
+1.  **Face Recognition Application** - Real-time face detection and recognition using **MediaPipe**.
+2.  **YouTube API Video Content Search** - Utilizes the **YouTube Data API** to search and display video content.
+3.  **YOLOv8 Object Detection** - Real-time image object detection using the **YOLOv8** model.
 
-## 子项目说明
+---
 
-### 1. 人脸识别应用 (FaceRecog)
+## Environment Requirements
 
-基于MediaPipe构建的人脸识别Web应用，能够通过浏览器访问摄像头，进行人脸检测和识别。
+This project requires **Python 3.6+** and provides independent dependencies for each sub-project. You can choose to create separate virtual environments for each application or use a unified dependency file in the root directory.
 
-**主要功能：**
-- 人脸检测与关键点提取
-- 人脸特征向量存储与比对
-- 实时摄像头图像处理
-- 用户人脸注册与识别
+---
 
-**技术栈：**
-- 后端：Flask, MediaPipe
-- 前端：HTML, JavaScript
-- 数据存储：JSON文件系统
+## Sub-Project Descriptions
 
-**启动方法：**
+### 1. Face Recognition Application (FaceRecog)
+
+A web application for face recognition built on **MediaPipe**, capable of accessing the camera through a browser for real-time face detection and recognition.
+
+**Key Features:**
+* Face detection and landmark extraction
+* Face feature vector storage and comparison
+* Real-time camera image processing
+* User face registration and recognition
+
+**Technology Stack:**
+* **Backend**: Flask, MediaPipe
+* **Frontend**: HTML, JavaScript
+* **Data Storage**: JSON file system
+
+**How to Run:**
 ```bash
 cd FaceRecog
-# 创建并激活虚拟环境
+# Create and activate virtual environment
 python -m venv face_recog_env
 source face_recog_env/bin/activate  # Linux/Mac
 # face_recog_env\Scripts\activate  # Windows
-# 安装依赖并启动
+# Install dependencies and start
 python app.py
 ```
 
-### 2. YouTube API视频内容搜索 (YouTube_API)
+### 2. YouTube API Video Content Search (YouTube_API)
 
-使用YouTube Data API v3构建的视频搜索应用，提供友好的用户界面进行视频内容检索。
+A video search application built using **YouTube Data API v3**, providing a user-friendly interface for video content retrieval.
 
-**主要功能：**
-- 关键词视频搜索
-- 详细视频信息显示
-- 视频缩略图和预览
-- API配额监控
+**Key Features:**
+* Keyword-based video search
+* Detailed video information display
+* Video thumbnails and previews
+* API quota monitoring
 
-**技术栈：**
-- 后端：Flask, Google API Client
-- 前端：React
-- 外部访问：ngrok (可选)
+**Technology Stack:**
+* **Backend**: Flask, Google API Client
+* **Frontend**: React
+* **External Access**: ngrok (Optional)
 
-**启动方法：**
+**How to Run:**
 ```bash
 cd YouTube_API
-# 设置环境
-source setup_env.sh  # 或 bash setup_env.sh
-# 安装依赖
+# Set up environment
+source setup_env.sh  # or bash setup_env.sh
+# Install dependencies
 bash install_deps.sh
-# 启动应用
+# Start the application
 bash start_app.sh
 ```
 
-### 3. YOLOv8对象检测 (yolov8_detection)
+### 3. YOLOv8 Object Detection (yolov8_detection)
 
-基于YOLOv8模型的实时对象检测Web应用，支持图像上传和实时检测。
+A real-time object detection web application based on the **YOLOv8 model**, supporting image uploads and live detection.
 
-**主要功能：**
-- 图像中对象检测与识别
-- 实时对象定位
-- 检测结果可视化
-- 支持多种物体类别识别
+**Key Features:**
+* Object detection and recognition in images
+* Real-time object localization
+* Detection result visualization
+* Supports recognition of multiple object categories
 
-**技术栈：**
-- 后端：Flask, Ultralytics YOLOv8
-- 前端：HTML, JavaScript
-- 深度学习：YOLOv8预训练模型
+**Technology Stack:**
+* **Backend**: Flask, Ultralytics YOLOv8
+* **Frontend**: HTML, JavaScript
+* **Deep Learning**: YOLOv8 pre-trained model
 
-**启动方法：**
+**How to Run:**
 ```bash
 cd yolov8_detection
-# 创建虚拟环境并安装依赖
+# Create virtual environment and install dependencies
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 # venv\Scripts\activate  # Windows
 pip install -r requirements.txt
-# 启动应用
-bash start_app.sh  # 或 ./start_app.sh
+# Start the application
+bash start_app.sh  # or ./start_app.sh
 ```
 
-## 统一依赖安装
+---
 
-如果您希望一次性安装所有子项目的依赖，可以使用根目录下的统一依赖文件：
+## Unified Dependency Installation
+
+If you wish to install all sub-project dependencies at once, you can use the unified dependency file in the root directory:
 
 ```bash
-# 创建全局虚拟环境
+# Create global virtual environment
 python -m venv multimedia_apps_env
 source multimedia_apps_env/bin/activate  # Linux/Mac
 # multimedia_apps_env\Scripts\activate  # Windows
 
-# 生成并安装统一依赖
+# Generate and install unified dependencies
 python -c "import os; open('unified_requirements.txt', 'w').writelines(line for file in ['FaceRecog/requirements.txt', 'YouTube_API/requirements.txt', 'yolov8_detection/requirements.txt'] if os.path.exists(file) for line in open(file))"
 pip install -r unified_requirements.txt
 ```
 
-## 开发与贡献
+---
 
-1. Fork 本项目
-2. 创建您的功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交您的更改 (`git commit -m 'Add some amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 打开一个 Pull Request
+## Development and Contribution
 
-## 许可证
+1.  Fork this repository.
+2.  Create your feature branch (`git checkout -b feature/amazing-feature`).
+3.  Commit your changes (`git commit -m 'Add some amazing feature'`).
+4.  Push to the branch (`git push origin feature/amazing-feature`).
+5.  Open a Pull Request.
 
-本项目根据MIT许可证发布 - 查看 `LICENSE` 文件了解详情。
+---
 
-## 致谢
+## License
 
-- 感谢 Google MediaPipe 提供的人脸识别技术
-- 感谢 YouTube Data API 提供的视频搜索功能
-- 感谢 Ultralytics 提供的 YOLOv8 模型
+This project is licensed under the MIT License - see the `LICENSE` file for details.
+
+---
+
+## Acknowledgements
+
+* Thanks to **Google MediaPipe** for the face recognition technology.
+* Thanks to **YouTube Data API** for providing video search functionality.
+* Thanks to **Ultralytics** for providing the **YOLOv8** model.
