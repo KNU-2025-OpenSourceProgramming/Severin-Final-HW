@@ -1,0 +1,9 @@
+# Python虚拟环境
+face_recog_env/
+
+
+# 环境变量文件
+.env
+
+# face_data目录
+face_data/

@@ -1,0 +1,7 @@
+# YouTube API 搜索应用依赖
+Flask==3.1.0
+google-api-python-client==2.170.0
+pyngrok==7.2.8
+flask-cors==5.0.1
+python-dotenv==1.1.0
+

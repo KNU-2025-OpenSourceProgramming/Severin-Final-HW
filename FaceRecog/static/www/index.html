@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>안면인식 시스템 (Face Recognition System)</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        video, canvas {
+            max-width: 100%;
+            background: #000;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .info-panel {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e7f3fe;
+            border-left: 6px solid #2196F3;
+        }
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const FaceRecognitionApp = () => {
+            // 摄像头流 (Camera Stream) 状态
+            const [stream, setStream] = React.useState(null);
+            // 摄像头类型 (Camera Type): 'user' (前置) 或 'environment' (后置)
+            const [cameraType, setCameraType] = React.useState('user');
+            // 用户消息 (User Message) 或错误信息
+            const [message, setMessage] = React.useState('');
+            // 识别结果 (Recognition Result)
+            const [recognitionResult, setRecognitionResult] = React.useState(null);
+            // 注册状态 (Registration Status)
+            const [isRegistering, setIsRegistering] = React.useState(false);
+            // 注册人名 (Person Name for Registration)
+            const [personName, setPersonName] = React.useState('');
+
+            // video 和 canvas 元素的引用
+            const videoRef = React.useRef(null);
+            const canvasRef = React.useRef(null);
+
+            // 摄像头启动和关闭的副作用 (Side Effect)
+            React.useEffect(() => {
+                startCamera();
+                // 组件卸载时停止摄像头
+                return () => {
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                };
+            }, [cameraType]); // cameraType 改变时重新启动摄像头
+
+            // 启动摄像头函数
+            const startCamera = async () => {
+                try {
+                    // 如果已有流，先停止
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                    // 获取新的媒体流 (Media Stream)
+                    const newStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: cameraType }, // 设置摄像头方向
+                        audio: false // 不需要音频
+                    });
+
+                    setStream(newStream);
+                    if (videoRef.current) {
+                        videoRef.current.srcObject = newStream; // 将视频流设置到 video 元素
+                    }
+                } catch (err) {
+                    setMessage(`카메라 접근 오류 (Camera Access Error): ${err.message}`);
+                }
+            };
+
+            // 切换摄像头函数
+            const toggleCamera = () => {
+                setCameraType(prev => prev === 'user' ? 'environment' : 'user');
+            };
+
+            // 捕获图像函数
+            const captureImage = () => {
+                const canvas = canvasRef.current;
+                const video = videoRef.current;
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const context = canvas.getContext('2d');
+                // 将视频当前帧绘制到 canvas 上
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // 返回 Base64 编码的 JPEG 图像数据
+                return canvas.toDataURL('image/jpeg', 0.8);
+            };
+
+            // 注册人脸函数
+            const registerFace = async () => {
+                if (!personName.trim()) { // 检查姓名是否为空
+                    setMessage('이름을 입력해주세요. (Please enter a name.)');
+                    return;
+                }
+                try {
+                    setIsRegistering(true); // 设置注册状态为真
+                    const imageData = captureImage(); // 捕获图像
+
+                    // 发送 POST 请求到后端 /register 接口
+                    const response = await fetch('/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            image: imageData,
+                            name: personName
+                        }),
+                    });
+
+                    const data = await response.json(); // 解析 JSON 响应
+
+                    if (data.success) {
+                        setMessage(`안면 등록 성공 (Face Registration Success): ${data.message}`);
+                        setPersonName(''); // 清空输入框
+                    } else {
+                        setMessage(`안면 등록 실패 (Face Registration Failed): ${data.message}`);
+                    }
+                } catch (error) {
+                    setMessage(`등록 오류 (Registration Error): ${error.message}`);
+                } finally {
+                    setIsRegistering(false); // 无论成功失败，重置注册状态
+                }
+            };
+
+            // 识别人脸函数
+            const recognizeFace = async () => {
+                try {
+                    const imageData = captureImage(); // 捕获图像
+
+                    // 发送 POST 请求到后端 /recognize 接口
+                    const response = await fetch('/recognize', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            image: imageData
+                        }),
+                    });
+
+                    const data = await response.json(); // 解析 JSON 响应
+
+                    if (data.success) {
+                        setRecognitionResult(data.result); // 设置识别结果
+                        drawBoundingBox(data.result); // 绘制边界框
+                        setMessage('안면 인식 성공! (Face Recognition Success!)');
+                    } else {
+                        setMessage(`안면 인식 실패 (Face Recognition Failed): ${data.message}`);
+                        setRecognitionResult(null);
+                    }
+                } catch (error) {
+                    setMessage(`인식 오류 (Recognition Error): ${error.message}`);
+                }
+            };
+
+            // 绘制边界框和信息函数
+            const drawBoundingBox = (result) => {
+                const canvas = canvasRef.current;
+                const video = videoRef.current;
+                const context = canvas.getContext('2d');
+
+                // 确保 canvas 与视频大小一致
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // 原本是隐藏 canvas，这里为了绘制显示，暂时设置为可见
+                canvas.style.display = 'block';
+
+                // 将视频当前帧绘制到 canvas 上作为背景
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                // 绘制边界框 (Bounding Box)
+                if (result.faces && result.faces.length > 0) {
+                    result.faces.forEach(face => {
+                        context.strokeStyle = '#00ff00'; // 绿色边框
+                        context.lineWidth = 3; // 边框宽度
+                        context.strokeRect(face.x, face.y, face.width, face.height); // 绘制矩形
+
+                        // 显示识别到的名字
+                        if (face.name) {
+                            context.fillStyle = '#00ff00'; // 绿色文字
+                            context.font = '20px Arial';
+                            context.fillText(face.name, face.x, face.y - 5); // 在框上方显示名字
+                        }
+                    });
+                }
+            };
+
+            return (
+                <div className="container">
+                    <h1>안면인식 시스템 (Face Recognition System)</h1>
+
+                    <div>
+                        <video
+                            ref={videoRef}
+                            autoPlay // 自动播放
+                            playsInline // 允许在移动设备上内联播放
+                            style={{ display: 'block' }} // 显示视频
+                        />
+                        <canvas
+                            ref={canvasRef}
+                            style={{ display: 'none' }} // 默认隐藏 canvas，用于捕获图像和绘制
+                        />
+                    </div>
+
+                    <div>
+                        <button onClick={toggleCamera}>
+                            카메라 전환 (Toggle Camera) ({cameraType === 'user' ? '전면 (Front)' : '후면 (Rear)'})
+                        </button>
+                    </div>
+
+                    <div>
+                        <h3>안면 등록 (Face Registration)</h3>
+                        <input
+                            type="text"
+                            value={personName}
+                            onChange={(e) => setPersonName(e.target.value)}
+                            placeholder="이름 입력 (Enter Name)"
+                            style={{ padding: '10px', marginRight: '10px' }}
+                        />
+                        <button
+                            onClick={registerFace}
+                            disabled={isRegistering} // 注册中禁用按钮
+                        >
+                            {isRegistering ? '등록 중... (Registering...)' : '안면 등록 (Register Face)'}
+                        </button>
+                    </div>
+
+                    <div>
+                        <button onClick={recognizeFace}>
+                            안면 인식 (Recognize Face)
+                        </button>
+                    </div>
+
+                    {message && ( // 如果有消息，显示消息
+                        <div className={message.includes('성공') ? 'success' : 'error'}>
+                            {message}
+                        </div>
+                    )}
+
+                    {recognitionResult && recognitionResult.faces && ( // 如果有识别结果，显示结果
+                        <div className="info-panel">
+                            <h3>인식 결과 (Recognition Result)</h3>
+                            {recognitionResult.faces.map((face, index) => (
+                                <div key={index}>
+                                    <p>이름 (Name): {face.name || '알 수 없음 (Unknown)'}</p>
+                                    <p>신뢰도 (Confidence): {(face.confidence * 100).toFixed(1)}%</p>
+                                    <p>위치 (Position): ({face.x}, {face.y})</p>
+                                    <p>크기 (Size): {face.width}x{face.height}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+        // 将 React 应用渲染到 HTML 页面中
+        ReactDOM.render(<FaceRecognitionApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
